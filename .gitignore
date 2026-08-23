@@ -1,2 +1,4 @@
 build
-
+fix-compile-commands.sh
+compile_commands.json
+.cache
