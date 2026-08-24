@@ -2,14 +2,17 @@
 #define _HASHTAB_
 
 #include <stdint.h>
+#include "error.h"
 
-typedef enum
-{
-    HT_SUCCESS = 0,
-    HT_INDEX_FAILED,
-    HT_KEY_EXISTS
+//typedef enum
+//{
+//    HT_SUCCESS = 0,
+//    HT_INDEX_FAILED,
+//    HT_KEY_EXISTS
+//
+//} hash_tab_status;
 
-} hash_tab_status;
+//void hash_tab_raise(hash_tab_status err);
 
 /* Hash table chain node
  * @brief singlely linked list node with char* value
@@ -17,6 +20,7 @@ typedef enum
 typedef struct htcn
 {
     char* value;
+    uint32_t metadata; // metadata field can be used for various purposes
     struct htcn* next;
 } hash_tab_chain_node;
 
@@ -56,11 +60,13 @@ typedef struct
 */
 void hash_tab_init(hash_tab* ht, hash_tab_init_params* init_params);
 
-hash_tab_status hash_tab_insert(hash_tab* ht, char* key);
+error_status hash_tab_insert(hash_tab* ht, char* key, uint32_t md);
 
 void hash_tab_remove(hash_tab* ht, char* key);
 
 void hash_tab_print(hash_tab* ht);
+
+void hash_tab_set_md(hash_tab* ht, uint32_t md);
 
 uint32_t hash_tab_poly_rolling(hash_tab* ht, char* key);
 

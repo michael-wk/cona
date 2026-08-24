@@ -3,6 +3,8 @@ add_library(engine_core STATIC
     core/application.c
     core/datamodel.c
     core/cona_math.c
+    core/renderer.c
+    core/error.c
 
     data/scene.c
     data/node.c

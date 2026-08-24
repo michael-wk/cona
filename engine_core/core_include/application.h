@@ -4,6 +4,9 @@
 #include <stdint.h>
 #include <SDL3/SDL.h>
 
+/* Application window
+ * @brief contains the data for the application window.
+*/ 
 typedef struct
 {
     uint16_t size_x;

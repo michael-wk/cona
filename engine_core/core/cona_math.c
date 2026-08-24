@@ -1,6 +1,6 @@
 #include "cona_math.h"
 
-double c_pow(int x, int n)
+int c_pow(int x, int n)
 {
     if (n == 0) return 1;
     double t = x;

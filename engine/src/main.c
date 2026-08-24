@@ -17,6 +17,7 @@
 #include <stdio.h>
 
 #include "application.h"
+#include "datamodel.h"
 #include "cona_math.h"
 #include "hashtab.h"
 
@@ -25,27 +26,23 @@
 #define WINDOW_SIZE_Y 500
 
 static application_window app_window;
+static data_model game_data_model;
+
 
 /* This function runs once at startup. */
 SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
 {
 
     application_window_init(&app_window, WINDOW_SIZE_X, WINDOW_SIZE_Y);
+    data_model_init(&game_data_model);
+
     // engine testing:
-    hash_tab ht;
-    hash_tab_init_params params = hash_tab_get_params();
-    params.bucket_size = 0xD;
-    hash_tab_init(&ht, &params);
-
-    printf("insert : %d\r\n",hash_tab_insert(&ht, "test"));
-    printf("insert : %d\r\n",hash_tab_insert(&ht, "grace"));
-    printf("insert : %d\r\n",hash_tab_insert(&ht, "mike"));
-    printf("insert : %d\r\n",hash_tab_insert(&ht, "crew"));
-    printf("insert : %d\r\n",hash_tab_insert(&ht, "bar"));
-    printf("insert : %d\r\n",hash_tab_insert(&ht, "foo"));
-    printf("insert : %d\r\n",hash_tab_insert(&ht, "poop"));
-
-    hash_tab_print(&ht);
+    add_scene(&game_data_model, "testing_scene");
+    //hash_tab ht;
+    //hash_tab_init_params params = hash_tab_get_params();
+    //params.bucket_size = 0xD;
+    //hash_tab_init(&ht, &params);
+    //hash_tab_print(&ht);
 
 
 
