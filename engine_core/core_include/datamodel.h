@@ -24,12 +24,24 @@ typedef struct
 
 } data_model;
 
+// scene functions
+//=======================================================================================
+
+// initializes data model
 void data_model_init(data_model* dm);
 
+// scene functions
+//=======================================================================================
+// adds scene with given key to datamodel, returning scene
 scene* add_scene(data_model* dm, char* name);
 
+// fetches scene with given key from datamodel.
+scene* get_scene(data_model* dm, char* name);
+
+// removes scene with given key from datamodel;
 error_status remove_scene(data_model* dm, char* name);
 
+// debugging - prints datamodel
 void data_model_print(data_model* dm);
 
 #endif

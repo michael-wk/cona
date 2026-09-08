@@ -21,11 +21,13 @@ void hash_tab_init(hash_tab* ht, hash_tab_init_params* init_params)
     ht->array = calloc(ht->BUCKETS, sizeof(void*));
 }
 
+
+
 error_status hash_tab_insert(hash_tab* ht, char* key, uint32_t md)
 {
 
     // getting the array index (hash function selected from init params)
-    int idx;
+    uint32_t idx;
     switch (ht->fn) 
     {
         case 0: idx = hash_tab_poly_rolling(ht, key);
@@ -49,8 +51,7 @@ error_status hash_tab_insert(hash_tab* ht, char* key, uint32_t md)
     // parsing the linked list to check for duplicate keys
     while (next != NULL)
     {
-        if (next->value == key) return error_throw(HT_KEY_EXISTS, "Key exist");
-         
+        if (next->value == key) return error_throw(HT_KEY_EXISTS, "Key exist"); 
         next = next->next;
     }
 
@@ -65,8 +66,21 @@ void hash_tab_remove(hash_tab* ht, char* key)
 {
 }
 
-void hash_tab_set_md(hash_tab* ht, uint32_t md)
+
+uint32_t hash_tab_get_md(hash_tab* ht, char* key)
 {
+    uint32_t idx;
+    switch(ht->fn)
+    {
+        case 0: idx = hash_tab_poly_rolling(ht, key);
+    }
+    if (!idx)
+    return 0xFFFFFFFF;
+}
+
+error_status _ht_get_md_succ(uint32_t md) 
+{ 
+    return (error_status)(md >> 28); 
 }
 
 void hash_tab_print(hash_tab* ht)
@@ -106,6 +120,9 @@ uint32_t hash_tab_poly_rolling(hash_tab* ht, char* key)
 }
 
 
+//void hash_tab_set_md(hash_tab* ht, uint32_t md)
+//{
+//}
 
 //void hash_tab_raise(hash_tab_status err)
 //{

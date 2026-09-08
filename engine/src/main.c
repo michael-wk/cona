@@ -44,11 +44,11 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
     //hash_tab_init(&ht, &params);
     //hash_tab_print(&ht);
 
-
+    data_model_print(&game_data_model);
 
     Uint32 SDL_WindowFlags =  SDL_WINDOW_RESIZABLE;
     /* Create the window */
-    if (!SDL_CreateWindowAndRenderer(APP_NAME, app_window.size_x, app_window.size_y, SDL_WindowFlags, &app_window.window, &app_window.renderer))
+     if (!SDL_CreateWindowAndRenderer(APP_NAME, app_window.size_x, app_window.size_y, SDL_WindowFlags, &app_window.window, &app_window.renderer))
     {
         SDL_Log("Couldn't create window and renderer: %s", SDL_GetError());
         return SDL_APP_FAILURE;

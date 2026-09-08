@@ -8,9 +8,13 @@
 typedef enum
 {
     SUCCESS = 0,
+
     // hash table error codes:
+    // ht error codes are delegated early on as ht metadata error status are 4 bits long
+    //
     HT_INDEX_FAILED, // failed to generate a hash index
     HT_KEY_EXISTS, // key exists when attempting to insert a hash key
+
 
     // data model error codes:
     DM_SCENE_OVERFLOW, // data model scenes exceed the max capacity

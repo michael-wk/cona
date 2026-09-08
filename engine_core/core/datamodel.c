@@ -3,8 +3,9 @@
 #include "error.h"
 
 #include <stdint.h>
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
+
 // Removes scene from idx, shifting other scenes and updating meta data
 void scene_rmv(scene** scenes, uint8_t idx);
 
@@ -21,8 +22,9 @@ void data_model_init(data_model* dm)
     
 }
 
-// 
 
+// scene methods
+//=========================================================================================
 scene* add_scene(data_model* dm, char* name)
 {
     // check if scenes overflow uint8_t 
@@ -46,7 +48,12 @@ scene* add_scene(data_model* dm, char* name)
     printf("scene added : %s\r\n", sptr->name);
 
     return sptr;
-    //return DM_SUCCESS;
+}
+
+
+scene* get_scene(data_model* dm, char* name)
+{
+
 }
 
 error_status remove_scene(data_model* dm, char* name)
@@ -56,4 +63,11 @@ error_status remove_scene(data_model* dm, char* name)
 
 void data_model_print(data_model* dm)
 {
+    printf("datamodel:\r\n");
+    // printing scenes:
+    uint8_t idx = 0;
+    while(idx < dm->scene_count)
+    {
+        printf()
+    }
 }
