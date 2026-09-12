@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+
+
 hash_tab_init_params hash_tab_get_params(void)
 {
     hash_tab_init_params p;
@@ -27,12 +29,14 @@ error_status hash_tab_insert(hash_tab* ht, char* key, uint32_t md)
 {
 
     // getting the array index (hash function selected from init params)
-    uint32_t idx;
+    uint32_t idx = 0xFFFFFFF1;
     switch (ht->fn) 
     {
         case 0: idx = hash_tab_poly_rolling(ht, key);
     }
-    if (!idx) return HT_INDEX_FAILED;
+    if (idx > 0xFFFFFFF0) return _ht_filter_idx_code(idx); // failed to hash key (index is a failed code)
+
+    //return HT_INDEX_FAILED;
 
     // allocating the node pointer & initializing
     hash_tab_chain_node* nodeptr = malloc(sizeof(hash_tab_chain_node));
@@ -59,6 +63,10 @@ error_status hash_tab_insert(hash_tab* ht, char* key, uint32_t md)
     nodeptr->next = ht->array[idx];
     ht->array[idx] = nodeptr;
     return SUCCESS;
+}
+
+error_status _ht_filter_idx_code(uint32_t idx)
+{
 }
 
 
