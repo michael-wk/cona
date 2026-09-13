@@ -68,6 +68,7 @@ void data_model_print(data_model* dm)
     uint8_t idx = 0;
     while(idx < dm->scene_count)
     {
-        printf()
+        printf("scene - idx:%d, name:%s\r\n",idx,dm->scenes[idx]->name);
+        idx++;
     }
 }

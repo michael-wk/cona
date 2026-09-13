@@ -5,6 +5,7 @@
 
 
 
+
 hash_tab_init_params hash_tab_get_params(void)
 {
     hash_tab_init_params p;
@@ -24,17 +25,21 @@ void hash_tab_init(hash_tab* ht, hash_tab_init_params* init_params)
 }
 
 
+uint8_t hash_tab_key_at_idx(hash_tab* ht, char* key, uint32_t idx)
+{
+}
+
 
 error_status hash_tab_insert(hash_tab* ht, char* key, uint32_t md)
 {
 
     // getting the array index (hash function selected from init params)
-    uint32_t idx = 0xFFFFFFF1;
+    uint32_t idx = HT_HASH_FAILED_INDEX + HT_INDEX_FAILED;
     switch (ht->fn) 
     {
         case 0: idx = hash_tab_poly_rolling(ht, key);
     }
-    if (idx > 0xFFFFFFF0) return _ht_filter_idx_code(idx); // failed to hash key (index is a failed code)
+    if (idx > HT_HASH_FAILED_INDEX) return _ht_filter_idx_code(idx); // failed to hash key (index is a failed code)
 
     //return HT_INDEX_FAILED;
 
@@ -67,6 +72,7 @@ error_status hash_tab_insert(hash_tab* ht, char* key, uint32_t md)
 
 error_status _ht_filter_idx_code(uint32_t idx)
 {
+    return (error_status)(idx & (0xF));
 }
 
 
@@ -77,13 +83,20 @@ void hash_tab_remove(hash_tab* ht, char* key)
 
 uint32_t hash_tab_get_md(hash_tab* ht, char* key)
 {
-    uint32_t idx;
+    uint32_t idx = HT_HASH_FAILED_INDEX + HT_INDEX_FAILED;
     switch(ht->fn)
     {
         case 0: idx = hash_tab_poly_rolling(ht, key);
     }
-    if (!idx)
-    return 0xFFFFFFFF;
+
+    // returning the error code shifted to the MD error code position for consistency
+    // metadata errors are read with _ht_get_md_succ so yeah
+    if (idx > HT_HASH_FAILED_INDEX) return (_ht_filter_idx_code(idx) << 28);
+    //if (!idx) //return MD_FAIL_INDEX + HT_INDEX_FAILED;
+
+
+    // ht->array[idx]
+    //return 0xFFFFFFFF;
 }
 
 error_status _ht_get_md_succ(uint32_t md) 
@@ -114,10 +127,10 @@ uint32_t hash_tab_poly_rolling(hash_tab* ht, char* key)
     uint8_t idx = 0;
     while (key[idx] != '\0')
     {
-        printf("d : idx:%u , const : %u , pow : %d \r\n", idx, ht->int_const, c_pow(ht->int_const, idx));
-        printf("s  char:%c, key:%u, res:%u\r\n",key[idx], key[idx], res);
+        //printf("d : idx:%u , const : %u , pow : %d \r\n", idx, ht->int_const, c_pow(ht->int_const, idx));
+        //printf("s  char:%c, key:%u, res:%u\r\n",key[idx], key[idx], res);
         res += (key[idx] * c_pow(ht->int_const, idx));
-        printf("z : res:%u\r\n", res);
+        //printf("z : res:%u\r\n", res);
         idx++;
     }
 

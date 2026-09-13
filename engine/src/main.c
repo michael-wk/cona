@@ -37,7 +37,18 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
     data_model_init(&game_data_model);
 
     // engine testing:
-    add_scene(&game_data_model, "testing_scene");
+    scene* s = add_scene(&game_data_model, "testing_scene");
+    
+    printf("T: testing getting metadata:\r\n");
+    uint32_t ht_md = hash_tab_get_md(game_data_model.scene_key_tab, "testing_scene");
+    printf("T: md: %d\r\n", ht_md);
+
+    printf("T: testing getting metadata from a non key:\r\n");
+    // expecting this to give error HT_INDEX_FAILED
+    uint32_t ht_bad_md = hash_tab_get_md(game_data_model.scene_key_tab, "blablabla");
+    printf("T: raw md: %d\r\n", ht_bad_md);
+    printf("T: md status code: %d\r\n", _ht_get_md_succ(ht_bad_md));
+
     //hash_tab ht;
     //hash_tab_init_params params = hash_tab_get_params();
     //params.bucket_size = 0xD;

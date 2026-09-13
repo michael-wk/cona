@@ -9,11 +9,21 @@
 //      -> when future hash functions are implemented, it might be more efficient to store a pointer to the hash function in the hash
 //      table object rather than using switch statements, should investigate
 
+// KNOWN FUTURE POTENTIAL REFACTORS:
+// @hash_tab_insert & anywhere checking if a key exists in ht at idx
+//      -> implemetning hast_bag_key_at_idx - this can replace the inline searching
+//      or could not, it's the same really.
+
+
 // hash table
 //
 // regular api functions are prefixed with hast_tab_
 // secondary functions and utility functions are prefixed with _ht_
 //
+
+// defines:
+
+#define HT_HASH_FAILED_INDEX 0xFFFFFFF0
 
 /* =================================================================================
  * Hash table chain node
@@ -68,6 +78,10 @@ typedef struct
 // Initializes hash table with passed init params.
 void hash_tab_init(hash_tab* ht, hash_tab_init_params* init_params);
 
+/* Searches for a key from given hashed index.
+ * Returns 1 if key exists at index, returns - if not
+*/ 
+uint8_t hash_tab_key_at_idx(char* key, uint32_t idx);
 
 /* Inserts key into hash table with passed metadata
  * Returns an error status code.
@@ -85,6 +99,7 @@ error_status _ht_filter_idx_code(uint32_t idx);
 void hash_tab_remove(hash_tab* ht, char* key);
 
 
+// Metadata defines:
 /* Get Metadata
  * Returns the 32 bit metadata for the hash tab key
  * 
