@@ -78,10 +78,10 @@ typedef struct
 // Initializes hash table with passed init params.
 void hash_tab_init(hash_tab* ht, hash_tab_init_params* init_params);
 
-/* Searches for a key from given hashed index.
- * Returns 1 if key exists at index, returns - if not
+/* Searches for a node of passed key at index
+ * Returns hash tab chain node if found, or returns NULL if not found.
 */ 
-uint8_t hash_tab_key_at_idx(char* key, uint32_t idx);
+hash_tab_chain_node* _ht_get_node_at_idx(hash_tab* ht, char* key, uint32_t idx);
 
 /* Inserts key into hash table with passed metadata
  * Returns an error status code.

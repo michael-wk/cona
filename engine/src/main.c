@@ -42,6 +42,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
     printf("T: testing getting metadata:\r\n");
     uint32_t ht_md = hash_tab_get_md(game_data_model.scene_key_tab, "testing_scene");
     printf("T: md: %d\r\n", ht_md);
+    printf("T: md status code: %d\r\n", _ht_get_md_succ(ht_md));
 
     printf("T: testing getting metadata from a non key:\r\n");
     // expecting this to give error HT_INDEX_FAILED

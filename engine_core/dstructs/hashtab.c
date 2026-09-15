@@ -2,6 +2,7 @@
 #include "cona_math.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 
 
@@ -25,8 +26,15 @@ void hash_tab_init(hash_tab* ht, hash_tab_init_params* init_params)
 }
 
 
-uint8_t hash_tab_key_at_idx(hash_tab* ht, char* key, uint32_t idx)
+hash_tab_chain_node* _ht_get_node_at_idx(hash_tab* ht, char* key, uint32_t idx)
 {
+    hash_tab_chain_node* next = ht->array[idx];
+    while (next != NULL)
+    {
+        if (strcmp(next->value, key) == 0) return next;
+        next = next->next;
+    }
+    return NULL;
 }
 
 
@@ -83,17 +91,27 @@ void hash_tab_remove(hash_tab* ht, char* key)
 
 uint32_t hash_tab_get_md(hash_tab* ht, char* key)
 {
+    printf(">>start\r\n");
     uint32_t idx = HT_HASH_FAILED_INDEX + HT_INDEX_FAILED;
     switch(ht->fn)
     {
         case 0: idx = hash_tab_poly_rolling(ht, key);
     }
 
+    printf(">>a\r\n");
     // returning the error code shifted to the MD error code position for consistency
     // metadata errors are read with _ht_get_md_succ so yeah
     if (idx > HT_HASH_FAILED_INDEX) return (_ht_filter_idx_code(idx) << 28);
-    //if (!idx) //return MD_FAIL_INDEX + HT_INDEX_FAILED;
+  
+    printf(">>b\r\n");
+    //if (!hash_tab_get_key_at_idx(ht, key, idx)) return (HT_KEY_NOT_FOUND << 28);
+    hash_tab_chain_node* node = _ht_get_node_at_idx(ht, key, idx);
+    
+    printf(">>c\r\n");
+    // checking if key exists at index
+    if (node == NULL) return (HT_KEY_NOT_FOUND << 28);
 
+    return node->metadata;
 
     // ht->array[idx]
     //return 0xFFFFFFFF;
