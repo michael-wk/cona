@@ -3,6 +3,12 @@
 
 #include "node.h"
 
+//===============================================
+// Scene
+//
+// @note scene creation and destruction functions
+// are in the datamodel header without dm / scene prefix
+
 typedef struct
 {
     char* name;
@@ -11,5 +17,6 @@ typedef struct
 
 // allocates and initialies scene ptr
 void scene_init(scene* s, char* name);
+
 
 #endif

@@ -45,7 +45,7 @@ scene* add_scene(data_model* dm, char* name)
     scene* sptr = malloc(sizeof(scene));
     scene_init(sptr, name);
     dm->scenes[dm->scene_count++] = sptr;
-    printf("scene added : %s\r\n", sptr->name);
+    printf("[dm] : scene added : %s\r\n", sptr->name);
 
     return sptr;
 }
@@ -53,17 +53,55 @@ scene* add_scene(data_model* dm, char* name)
 
 scene* get_scene(data_model* dm, char* name)
 {
+    // gets the metadata of the scene with passed name from dm scene key table
+    // if metadata is good, gets scene at index from metadata
+    uint32_t md = hash_tab_get_md(dm->scene_key_tab, name);
+    
+    error_status err = error_throw(_ht_get_md_succ(md), "Couldn't get MD - get_scene"); 
+    if (err) return NULL;
 
+    // the scene's index should be the metadata 
+    uint8_t scene_idx = md & (0xF);
+    printf("[dm] : got scene idx: %d\r\n", scene_idx);
+
+    return dm->scenes[scene_idx];
+    //return NULL;
 }
 
 error_status remove_scene(data_model* dm, char* name)
 {
+    // CRITICALLY - remove scene will need to shift all indexes left
+    // !! This also means to update all them metadata for index positions.
+    // routine will be shifting left, simultaneously decrementing MD
+    
+    //scene* s = get_scene(dm, name);
+    //if (s == NULL) return HT_KEY_NOT_FOUND;
+
+    // get md
+    uint32_t md = hash_tab_get_md(dm->scene_key_tab, name);
+    error_status err = error_throw(_ht_get_md_succ(md), "Couldn't get metadata when removing scene.");
+    if (err) return err;
+    
+    // get index, from idx, shifting elements left until scene count, 
+    for (uint8_t idx = (md & 0xFF) + 1; idx < dm->scene_count; idx++)
+    {
+        // shifting left
+        scene* s = dm->scenes[idx];
+        dm->scenes[idx - 1] = s;
+        dm->scenes[idx] = NULL;
+
+        // updating metadata
+        hash_tab_set_md_idx(dm->scene_key_tab, s->name, (idx - 1));
+    }
+    
+    // free scene memory for removed scene
+    dm->scene_count--;
     return SUCCESS;
 }
 
 void data_model_print(data_model* dm)
 {
-    printf("datamodel:\r\n");
+    printf("__________\r\ndatamodel: [scene_count: %d]\r\n", dm->scene_count);
     // printing scenes:
     uint8_t idx = 0;
     while(idx < dm->scene_count)

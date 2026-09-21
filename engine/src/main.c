@@ -38,6 +38,9 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
 
     // engine testing:
     scene* s = add_scene(&game_data_model, "testing_scene");
+    scene* s1 = add_scene(&game_data_model, "testing_scene1");
+    scene* s2 = add_scene(&game_data_model, "testing_scene");
+    scene* s3 = add_scene(&game_data_model, "testing_scene3");
     
     printf("T: testing getting metadata:\r\n");
     uint32_t ht_md = hash_tab_get_md(game_data_model.scene_key_tab, "testing_scene");
@@ -50,11 +53,20 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
     printf("T: raw md: %d\r\n", ht_bad_md);
     printf("T: md status code: %d\r\n", _ht_get_md_succ(ht_bad_md));
 
+    // testing get_scene
+    //scene* s2 = get_scene(&game_data_model, "testing_scene");
+
+
     //hash_tab ht;
     //hash_tab_init_params params = hash_tab_get_params();
     //params.bucket_size = 0xD;
     //hash_tab_init(&ht, &params);
     //hash_tab_print(&ht);
+
+    data_model_print(&game_data_model);
+
+    remove_scene(&game_data_model, "testing_scene");
+    //remove_scene(&game_dta_model, "testing_scene");
 
     data_model_print(&game_data_model);
 

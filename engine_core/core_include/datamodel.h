@@ -35,7 +35,9 @@ void data_model_init(data_model* dm);
 // adds scene with given key to datamodel, returning scene
 scene* add_scene(data_model* dm, char* name);
 
-// fetches scene with given key from datamodel.
+/* fetches scene with given key from datamodel.
+ * Returns NULL if no scene exists with name
+*/
 scene* get_scene(data_model* dm, char* name);
 
 // removes scene with given key from datamodel;

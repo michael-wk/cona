@@ -102,7 +102,13 @@ void hash_tab_remove(hash_tab* ht, char* key);
 // Metadata defines:
 /* Get Metadata
  * Returns the 32 bit metadata for the hash tab key
- * 
+ *
+ * @TODO - if I want to add some configuration to this, will need to have to add
+ * options for metadata index bits to be expanded from 8 bit (255) to 15 bits
+ *
+ * Metadata bits:
+ * > 0:7 - index in buckets -  
+ *
  * Reserved bits are aligned from the left, their bits are:
  * > 31:28 success bit - corresponding to an error keycode (hash table key code)
 */ 
@@ -111,7 +117,10 @@ uint32_t hash_tab_get_md(hash_tab* ht, char* key);
 // returns the error code from metmadata
 error_status _ht_get_md_succ(uint32_t md);
 
-
+/* sets the metadata index of for the key
+ * 8 bit indexes
+*/
+error_status hash_tab_set_md_idx(hash_tab* ht, char* key, uint8_t idx);
 
 // prints hash table
 void hash_tab_print(hash_tab* ht);

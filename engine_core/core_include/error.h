@@ -24,11 +24,16 @@ typedef enum
 /*
  * @brief Error message print corresponding to each error code
 */ 
-void error_raise(error_status err);
+void error_raise(error_status err); 
 
 /*
  * @brief - throws an error of passed code, prints error message string.
 */ 
 error_status error_throw(error_status err, const char* msg);
+
+/* Calls error raise, calls function pointer callback.
+ * @TODO this error handler is used for game dev not engine dev 
+*/ 
+// error_status error_catch(error_status err);
 
 #endif

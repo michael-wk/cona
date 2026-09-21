@@ -65,10 +65,12 @@ error_status hash_tab_insert(hash_tab* ht, char* key, uint32_t md)
         return SUCCESS;
     }
 
+    //printf("DB: checking if key exists: ");
     // parsing the linked list to check for duplicate keys
     while (next != NULL)
     {
-        if (next->value == key) return error_throw(HT_KEY_EXISTS, "Key exist"); 
+        //printf("%s, ", next->value);
+        if (strcmp(next->value, key) == 0) return error_throw(HT_KEY_EXISTS, "Key exist"); 
         next = next->next;
     }
 
@@ -86,28 +88,29 @@ error_status _ht_filter_idx_code(uint32_t idx)
 
 void hash_tab_remove(hash_tab* ht, char* key)
 {
+
 }
 
 
 uint32_t hash_tab_get_md(hash_tab* ht, char* key)
 {
-    printf(">>start\r\n");
+    //printf(">>start\r\n");
     uint32_t idx = HT_HASH_FAILED_INDEX + HT_INDEX_FAILED;
     switch(ht->fn)
     {
         case 0: idx = hash_tab_poly_rolling(ht, key);
     }
 
-    printf(">>a\r\n");
+    //printf(">>a\r\n");
     // returning the error code shifted to the MD error code position for consistency
     // metadata errors are read with _ht_get_md_succ so yeah
     if (idx > HT_HASH_FAILED_INDEX) return (_ht_filter_idx_code(idx) << 28);
-  
-    printf(">>b\r\n");
+   
+    //printf(">>b\r\n");
     //if (!hash_tab_get_key_at_idx(ht, key, idx)) return (HT_KEY_NOT_FOUND << 28);
     hash_tab_chain_node* node = _ht_get_node_at_idx(ht, key, idx);
     
-    printf(">>c\r\n");
+    //printf(">>c\r\n");
     // checking if key exists at index
     if (node == NULL) return (HT_KEY_NOT_FOUND << 28);
 
@@ -122,9 +125,25 @@ error_status _ht_get_md_succ(uint32_t md)
     return (error_status)(md >> 28); 
 }
 
+error_status hash_tab_set_md_idx(hash_tab* ht, char* key, uint8_t md)
+{
+    uint32_t idx = HT_HASH_FAILED_INDEX + HT_INDEX_FAILED;
+    switch(ht->fn)
+    {
+        case 0: idx = hash_tab_poly_rolling(ht, key);
+    }
+    // returning the error code if index exceeds bucket size bounds (err)
+    if (idx > HT_HASH_FAILED_INDEX) return (_ht_filter_idx_code(idx));
+
+    hash_tab_chain_node* node = _ht_get_node_at_idx(ht, key, idx);
+    node->metadata &= ~(0xFF);  // clearing index bits
+    node->metadata |= idx;      // setting new index metadata
+    return SUCCESS;
+}
+
 void hash_tab_print(hash_tab* ht)
 {
-    printf("ht > debugging print for indexes between 0 and %d\r\n", ht->BUCKETS);
+    printf("[ht] : debugging print for indexes between 0 and %d\r\n", ht->BUCKETS);
     for (int i = 0; i < ht->BUCKETS; i++)
     {
         printf("%d: ",i);
@@ -152,9 +171,9 @@ uint32_t hash_tab_poly_rolling(hash_tab* ht, char* key)
         idx++;
     }
 
-    printf("debug: %d\r\n", idx);
+    //printf("debug: %d\r\n", idx);
     res %= ht->BUCKETS; 
-    printf("ht > hashed value for %s : %d\r\n", key, res);
+    printf("[ht] : hashed value for %s : %d\r\n", key, res);
     return (uint32_t)res;
 }
 
