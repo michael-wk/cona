@@ -81,9 +81,14 @@ error_status remove_scene(data_model* dm, char* name)
     uint32_t md = hash_tab_get_md(dm->scene_key_tab, name);
     error_status err = error_throw(_ht_get_md_succ(md), "Couldn't get metadata when removing scene.");
     if (err) return err;
-    
+   
+    // freeing scene
+    uint8_t idx = (md & 0xFF);
+    scene* rmv_scene = dm->scenes[idx];
+    free(rmv_scene);
+
     // get index, from idx, shifting elements left until scene count, 
-    for (uint8_t idx = (md & 0xFF) + 1; idx < dm->scene_count; idx++)
+    for (idx += 1; idx < dm->scene_count; idx++)
     {
         // shifting left
         scene* s = dm->scenes[idx];
@@ -93,9 +98,11 @@ error_status remove_scene(data_model* dm, char* name)
         // updating metadata
         hash_tab_set_md_idx(dm->scene_key_tab, s->name, (idx - 1));
     }
-    
-    // free scene memory for removed scene
+    // removing scene key and decrementing scene
+
+    hash_tab_remove(dm->scene_key_tab, name);
     dm->scene_count--;
+
     return SUCCESS;
 }
 

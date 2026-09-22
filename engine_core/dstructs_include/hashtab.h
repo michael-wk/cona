@@ -78,6 +78,11 @@ typedef struct
 // Initializes hash table with passed init params.
 void hash_tab_init(hash_tab* ht, hash_tab_init_params* init_params);
 
+/* Gets hashed index of the passed key
+ * selects hash function dependant on ht's hash_tab_hash_func
+*/ 
+uint32_t _ht_get_hashed_idx(hash_tab* ht, char* key);
+
 /* Searches for a node of passed key at index
  * Returns hash tab chain node if found, or returns NULL if not found.
 */ 

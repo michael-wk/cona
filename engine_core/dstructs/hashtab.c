@@ -26,6 +26,17 @@ void hash_tab_init(hash_tab* ht, hash_tab_init_params* init_params)
 }
 
 
+uint32_t _ht_get_hashed_idx(hash_tab* ht, char* key)
+{
+    // getting the array index (hash function selected from init params)
+    uint32_t idx = HT_HASH_FAILED_INDEX + HT_INDEX_FAILED;
+    switch (ht->fn) 
+    {
+        case 0: idx = hash_tab_poly_rolling(ht, key);
+    } 
+    return idx;
+}
+
 hash_tab_chain_node* _ht_get_node_at_idx(hash_tab* ht, char* key, uint32_t idx)
 {
     hash_tab_chain_node* next = ht->array[idx];
@@ -42,11 +53,12 @@ error_status hash_tab_insert(hash_tab* ht, char* key, uint32_t md)
 {
 
     // getting the array index (hash function selected from init params)
-    uint32_t idx = HT_HASH_FAILED_INDEX + HT_INDEX_FAILED;
-    switch (ht->fn) 
-    {
-        case 0: idx = hash_tab_poly_rolling(ht, key);
-    }
+    //uint32_t idx = HT_HASH_FAILED_INDEX + HT_INDEX_FAILED;
+    //switch (ht->fn) 
+    //{
+    //    case 0: idx = hash_tab_poly_rolling(ht, key);
+    //}
+    uint32_t idx = _ht_get_hashed_idx(ht, key);
     if (idx > HT_HASH_FAILED_INDEX) return _ht_filter_idx_code(idx); // failed to hash key (index is a failed code)
 
     //return HT_INDEX_FAILED;
@@ -88,23 +100,30 @@ error_status _ht_filter_idx_code(uint32_t idx)
 
 void hash_tab_remove(hash_tab* ht, char* key)
 {
-
+    // getting the index 
+    // iterate over ht to find chain node with key as value
+    // setting the 
 }
 
 
 uint32_t hash_tab_get_md(hash_tab* ht, char* key)
 {
     //printf(">>start\r\n");
-    uint32_t idx = HT_HASH_FAILED_INDEX + HT_INDEX_FAILED;
-    switch(ht->fn)
-    {
-        case 0: idx = hash_tab_poly_rolling(ht, key);
-    }
+    //uint32_t idx = HT_HASH_FAILED_INDEX + HT_INDEX_FAILED;
+    //switch(ht->fn)
+    //{
+    //    case 0: idx = hash_tab_poly_rolling(ht, key);
+    //}
 
+    uint32_t idx = _ht_get_hashed_idx(ht, key);
+    // returning the error code shifted to the MD error code position for consistency
+    // metadata errors are read with _ht_get_md_succ so yeah
+    if (idx > HT_HASH_FAILED_INDEX) return (_ht_filter_idx_code(idx) << 28); // failed to hash key (index is a failed code)
+    
     //printf(">>a\r\n");
     // returning the error code shifted to the MD error code position for consistency
     // metadata errors are read with _ht_get_md_succ so yeah
-    if (idx > HT_HASH_FAILED_INDEX) return (_ht_filter_idx_code(idx) << 28);
+    //if (idx > HT_HASH_FAILED_INDEX) return (_ht_filter_idx_code(idx) << 28);
    
     //printf(">>b\r\n");
     //if (!hash_tab_get_key_at_idx(ht, key, idx)) return (HT_KEY_NOT_FOUND << 28);
