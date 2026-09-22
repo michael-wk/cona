@@ -64,11 +64,13 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
     //hash_tab_print(&ht);
 
     data_model_print(&game_data_model);
+    hash_tab_print(game_data_model.scene_key_tab);
 
     remove_scene(&game_data_model, "testing_scene");
     //remove_scene(&game_dta_model, "testing_scene");
 
     data_model_print(&game_data_model);
+    hash_tab_print(game_data_model.scene_key_tab);
 
     Uint32 SDL_WindowFlags =  SDL_WINDOW_RESIZABLE;
     /* Create the window */

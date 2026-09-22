@@ -15,6 +15,7 @@ typedef enum
     HT_INDEX_FAILED, // failed to generate a hash index
     HT_KEY_EXISTS, // key exists when attempting to insert a hash key
     HT_KEY_NOT_FOUND,
+    HT_GENERIC_FAIL,
 
     // data model error codes:
     DM_SCENE_OVERFLOW, // data model scenes exceed the max capacity

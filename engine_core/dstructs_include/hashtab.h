@@ -101,7 +101,7 @@ error_status _ht_filter_idx_code(uint32_t idx);
 /*
  *
 */ 
-void hash_tab_remove(hash_tab* ht, char* key);
+error_status hash_tab_remove(hash_tab* ht, char* key);
 
 
 // Metadata defines:
