@@ -17,9 +17,14 @@ typedef enum
     HT_KEY_NOT_FOUND,
     HT_GENERIC_FAIL,
 
+    // stack error codes:
+    STACK_INIT_FAILED,
+    STACK_OVERFLOW,
+    STACK_EMPTY,
+    
     // data model error codes:
     DM_SCENE_OVERFLOW, // data model scenes exceed the max capacity
-
+    
 } error_status;
 
 /*

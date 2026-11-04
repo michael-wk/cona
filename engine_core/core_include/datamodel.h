@@ -22,6 +22,10 @@ typedef struct
     scene** scenes;
     hash_tab* scene_key_tab; // scene key table contains the key map of each scene
 
+
+    hash_tab* node_lookup_tab; 
+
+
 } data_model;
 
 // scene functions

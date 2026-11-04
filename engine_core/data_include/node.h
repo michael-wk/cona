@@ -12,4 +12,7 @@ typedef struct node_struct
 
 void node_init(node* n);
 
+// Adds a child node to passed node with name N.
+node* node_add_node(node* n, char* name);
+
 #endif

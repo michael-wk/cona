@@ -207,6 +207,11 @@ uint32_t hash_tab_poly_rolling(hash_tab* ht, char* key)
 }
 
 
+uint32_t hash_tab_dir_conversion(hash_tab* ht, char* key)
+{
+    return 0; //NOT IMPLEMENTED
+}
+
 //void hash_tab_set_md(hash_tab* ht, uint32_t md)
 //{
 //}

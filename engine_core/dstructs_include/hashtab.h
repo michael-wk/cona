@@ -40,7 +40,8 @@ typedef struct htcn
 // Enum hash function, determins which function is used for hashing keys
 typedef enum
 {
-    POLY_ROLLING        // 0 - polynomial rolling
+    POLY_ROLLING,       // 0 - polynomial rolling
+    DIRECT_CONVERSION   // 1 - direct conversion (char* to representative int)
 } hash_tab_hash_func;
 
 /* =================================================================================
@@ -140,6 +141,8 @@ void hash_tab_print(hash_tab* ht);
 // polynomial rolling hash function
 uint32_t hash_tab_poly_rolling(hash_tab* ht, char* key);
 
+
+uint32_t hash_tab_dir_conversion(hash_tab* ht, char* key);
 
 #endif
 

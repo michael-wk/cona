@@ -18,5 +18,6 @@ typedef struct
 // allocates and initialies scene ptr
 void scene_init(scene* s, char* name);
 
+node* scene_add_node(scene* s, char* name);
 
 #endif

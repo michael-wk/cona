@@ -1,0 +1,67 @@
+
+A) topic : scenes & nodes
+
+- scenes are stored with unique hashed keys in the datamodel as they are 
+fetched by scene name from the datamodel. This means that there can only be
+one scene with any particular name.
+
+This is okay because of these conditions:
+    - scenes can only be parented to the datamodel directly
+    - scenes are able to dynamically be created / destroyed at runtime
+    and such scene IDs are more difficult to manage than scene names
+
+- with nodes, a node can be parented to any scene, and a node can be parented
+to any node.
+- nodes are searched for via traversal of the scene tree (at render time) 
+rather than by name
+- nodes *should* be wrapped in lifetime managed structs rather than freely
+existing.
+
+
+okay describing a scene like this:
+
+SCENE_1
+- node_1 {z:0}
+- node_2 {z:1}
+- node_3 {z:2}
+
+lets say you have instance:
+thing { node* node_1 } - where node_1 is the same as in SCENE_1.
+implementing a cleanup would be like this:
+
+node_clean(node_1) - this will need to lookup node_1 in the scene tree and
+remove it.
+
+Q: should the scene tree structure be a linked list?
+
+N[ children n[children] ]
+
+a) there's no context to where in the parent array node_1 exists,
+so lookup at removal time is O(N). Not the biggest fan of this.
+
+how would u improve this? linked list wouldn't improve this.
+
+solutions:
+- implement nodeIDs (unique node ids that increment (freed ones added to a bucket))
+and then a lookup table within a node of its children's node IDs
+
+scene_remove_node() - lookup node id array idx, remove node, add node id to buckets
+node_remove_node() - lookup node id array idx, remove node, add node id to buckets
+
+so the way this lookup should work
+    - global lookup table for nodes? this should just be another unordered map
+    in datamodel tbh.
+
+    it should just be the already implemented hashmap
+
+        hashmap<int,int>
+    
+    will have to modify hashmap to have a mode where the hash function just does
+    nothing to the input key.
+
+    well actually, this is internal functions, so dont really need to reimplement
+    the hash tab functions that take a char* key, can just convert int id to a char
+
+    what datamodel needs to implement:
+        - stack<int> free_node_indexes
+        - hash_tab<direct_conversion_hash>
