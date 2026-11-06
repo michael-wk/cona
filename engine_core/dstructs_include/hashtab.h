@@ -4,6 +4,10 @@
 #include <stdint.h>
 #include "error.h"
 
+// NEW FEATURES TODO?
+// @DIRECT_CONVERSION hash function
+//      -> might be able to drop the chain nodes?
+
 // NOTES FOR FUTURE:
 // @hash_tab_insert & @hash_tab_get_md / anywhere calling hash functions:
 //      -> when future hash functions are implemented, it might be more efficient to store a pointer to the hash function in the hash
@@ -13,6 +17,7 @@
 // @hash_tab_insert & anywhere checking if a key exists in ht at idx
 //      -> implemetning hast_bag_key_at_idx - this can replace the inline searching
 //      or could not, it's the same really.
+//
 
 
 // hash table

@@ -12,6 +12,7 @@ void scene_rmv(scene** scenes, uint8_t idx);
 
 void data_model_init(data_model* dm)
 {
+    // initializing scenes lookup table
     hash_tab_init_params params = hash_tab_get_params(); 
    
     dm->scene_key_tab = malloc(sizeof(hash_tab));
@@ -20,6 +21,16 @@ void data_model_init(data_model* dm)
     dm->scene_count = 0;
     dm->scenes = malloc(params.bucket_size * sizeof(scene*));
     
+    // initializing node loopup table
+    hash_tab_init_params node_params = hash_tab_get_params();
+    node_params->fn = DIRECT_CONVERSION; // direct conversion from char* to int
+
+    dm->node_lookup_tab = malloc(sizeof(hash_tab));
+    hash_tab_init(dm->node_lookup_tab, &node_params);
+
+    // init node free idx stack
+    dm->free_node_idxs = malloc(sizeof(u32_stack));
+    u32_stack_init(dm->free_node_idxs, dm->node_lookup_tab->BUCKETS);
 }
 
 
